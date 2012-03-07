@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<!--
+  build.xml - tochy
+-->
+<project name="tochy" default="dist" basedir=".">
+  <property name="src" value="src/main/java" />
+  <property name="build" value="bin" />
+  <property name="dist" value="target" />
+
+  <target name="compile">
+    <mkdir dir="${build}" />
+    <javac srcdir="${src}" destdir="${build}" encoding="utf-8" />
+  </target>
+
+  <target name="dist" depends="compile">
+    <tstamp />
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${dist}/tochy-${DSTAMP}.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" value="tochy.Launcher"/>
+        <attribute name="Class-Path" value="."/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+
+</project>
