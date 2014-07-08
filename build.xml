@@ -9,7 +9,7 @@
 
   <target name="compile">
     <mkdir dir="${build}" />
-    <javac srcdir="${src}" destdir="${build}" encoding="utf-8" />
+    <javac srcdir="${src}" destdir="${build}" encoding="utf-8" includeantruntime="false" />
   </target>
 
   <target name="dist" depends="compile">
@@ -17,7 +17,7 @@
     <mkdir dir="${dist}"/>
     <jar jarfile="${dist}/tochy-${DSTAMP}.jar" basedir="${build}">
       <manifest>
-        <attribute name="Main-Class" value="tochy.Launcher"/>
+        <attribute name="Main-Class" value="jp.windish.tochy.Launcher"/>
         <attribute name="Class-Path" value="."/>
       </manifest>
     </jar>
