@@ -23,11 +23,15 @@ public class SocketWrapper {
 	private BufferedReader m_reader = null ;
 
 	/** システムの文字コード */
-	private String m_sys_encoding = "";
+	private static String m_sys_encoding = null;
 
 	/** 送受信バッファの文字コード */
 	private static final String BUFFER_ENCODING = "utf-8" ;
 
+	static {
+		m_sys_encoding = System.getProperty("file.encoding");
+	}
+	
 	/**
 	 * IPアドレスとポート番号を受けとって、ソケットを作成するコンストラクタ
 	 * @param remote_address
@@ -45,7 +49,6 @@ public class SocketWrapper {
 		}
 		m_socket = new Socket(remote_address, port_number) ;
 		makeBuffer() ;
-		saveSystemEncoding();
 	}
 
 	/**
@@ -58,7 +61,6 @@ public class SocketWrapper {
 		}
 		m_socket = sk ;
 		makeBuffer() ;
-		saveSystemEncoding();
 	}
 
 	/**
@@ -100,13 +102,6 @@ public class SocketWrapper {
 	 */
 	public String getRemoteAddress() {
 		return m_socket.getInetAddress().toString() ;
-	}
-
-	/**
-	 * システムの文字コードを保持します。
-	 */
-	private void saveSystemEncoding() {
-		m_sys_encoding = System.getProperty("file.encoding");
 	}
 
 	/**

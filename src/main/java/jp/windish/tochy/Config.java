@@ -43,9 +43,9 @@ public class Config {
 
 	/** アプリケーション情報 */
 	public static final String APP_NAME = "トーチー！" ;
-	public static final String APP_VERSION = "0.2" ;
-	public static final String APP_COPYRIGHT = "yamako 2007-2008" ;
-	
+	public static final String APP_VERSION = "0.5" ;
+	public static final String APP_COPYRIGHT = "yamako 2007-2014" ;
+
 	/** 起動モード */
 	public static final String CLIENT_MODE = "クライアント" ;
 	public static final String SERVER_MODE = "サーバ" ;
