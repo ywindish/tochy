@@ -1,35 +1,49 @@
 package jp.windish.tochy;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
 
 /**
  * 入力した文字列をサーバーに送信するGUIクライアント。
  * @author yamako
- * 
+ *
  */
 public class Client extends JFrame
 	implements KeyListener, WindowListener, ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private SocketWrapper m_network = null ; // サーバとの接続
 	private Server m_server = null ;         // ローカルサーバ（サーバモード時に保持）
-	
+
 	private ClientView m_view = null ;      // 表示部 + ログファイル
 	private JTextField m_textfield = null ; // 入力部
 	private ConfigDialog m_config = null ;  // 設定ダイアログ
-	
+
 	private JButton m_button_config = null ; // 設定ボタン
 	private JButton m_button_quit = null ;   // 通信終了ボタン
-	
+
 	/**
 	 * コンストラクタ
 	 * @throws HeadlessException
@@ -58,12 +72,12 @@ public class Client extends JFrame
 		sendUserName() ;
 		receiveText() ;
 	}
-	
+
 	/**
 	 * UI作成。ウィジェットを配置する
 	 */
 	private void makeUI() {
-		
+
 		Font font = Config.getFont() ;
 		Container cont = getContentPane() ;
 
@@ -72,7 +86,7 @@ public class Client extends JFrame
 		m_button_config = new JButton("設定") ;
 		m_button_config.addActionListener(this) ;
 		button_panel.add(m_button_config) ;
-		
+
 		// ボタン
 		m_button_quit = new JButton("通信終了") ;
 		m_button_quit.addActionListener(this) ;
@@ -84,7 +98,7 @@ public class Client extends JFrame
 		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED) ;
 		jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) ;
 		cont.add(jsp, BorderLayout.CENTER) ;
-		
+
 		// 入力部
 		m_textfield = new JTextField("", Config.getConfigInt(Config.C_TEXT_COLUMN)) ;
 		m_textfield.addKeyListener(this) ;
@@ -101,7 +115,7 @@ public class Client extends JFrame
 		setVisible(true) ;
 		m_textfield.requestFocusInWindow() ; // 起動したら即入力できるように。
 	}
-	
+
 	/**
 	 * サーバに接続する
 	 * @param strIpAddress
@@ -110,7 +124,7 @@ public class Client extends JFrame
 	private void connect() {
 		String strIpAddress = Config.getConfig(Config.C_NET_ADDRESS) ;
 		try {
-			m_network = new SocketWrapper(strIpAddress, Config.getConfigInt(Config.C_NET_PORT), null) ;
+			m_network = new SocketWrapper(strIpAddress, Config.getConfigInt(Config.C_NET_PORT)) ;
 		} catch (ConnectException e) {
 			m_view.printSystemMessage("サーバが見つかりません。接続先アドレスを確認して下さい。") ;
 		} catch (UnknownHostException e) {
@@ -123,8 +137,8 @@ public class Client extends JFrame
 		}
 		m_view.printSystemMessage("サーバに接続しました。") ;
 	}
-	
-	/** 
+
+	/**
 	 * ユーザ名をサーバに送信する
 	 */
 	private void sendUserName() {
@@ -135,7 +149,7 @@ public class Client extends JFrame
 			m_view.printSystemMessage(e.getLocalizedMessage()) ;
 		}
 	}
-	
+
 	/**
 	 * サーバからメッセージを受信して、表示エリアに表示しつづける。
 	 * 通信が切断されるか、nullを受信したら、受信終了。
@@ -165,7 +179,7 @@ public class Client extends JFrame
 		}
 		m_textfield.setText("") ;
 	}
-	
+
 	/**
 	 * 設定ファイルを保存する
 	 *
@@ -182,19 +196,19 @@ public class Client extends JFrame
 			m_view.printSystemMessage("設定ファイルを保存できません。") ;
 		}
 	}
-	
+
 	/**
 	 * 終了するときの動作
 	 */
 	private void exit() {
-		
+
 		// ダイアログを出して、いいえだったら終了しない。
 		int answer = JOptionPane.showConfirmDialog(this, "終了しますか？", "", JOptionPane.YES_NO_OPTION) ;
 		if (answer != JOptionPane.YES_OPTION) {
 			return ;
 		}
 		saveConfig() ; // 設定ファイルを保存する。
-		
+
 		if (m_network != null) {
 			try {
 				// サーバへの接続を切る。
@@ -209,10 +223,10 @@ public class Client extends JFrame
 			m_server.shutdown() ;
 		}
 		dispose() ;
-		
+
 		System.exit(0) ; // なぜかこれ書かないと終わらない。
 	}
-	
+
 	/**
 	 * 設定ダイアログ呼び出し後の再設定
 	 *
@@ -256,7 +270,7 @@ public class Client extends JFrame
 			break;
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)

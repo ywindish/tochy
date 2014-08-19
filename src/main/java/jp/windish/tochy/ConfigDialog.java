@@ -30,12 +30,12 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String TITLE = "設定" ; 
-	
+	private static final String TITLE = "設定" ;
+
 	private Client m_owner = null ; // 呼び出し元
-	
+
 	private JTextField m_user_name = null ;  // ユーザー名
-	private JComboBox  m_font_name = null ;  // フォント名
+	private JComboBox<String>  m_font_name = null ;  // フォント名
 	private JTextField m_font_size = null ;  // フォントサイズ
 	private JCheckBox  m_logging = null ;    // ログを取るか否か
 	private JButton    m_fore_color = null ; // 文字色
@@ -43,7 +43,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 
 	private JButton m_ok = null ;
 	private JButton m_cancel = null ;
-	
+
 	/**
 	 * コンストラクタ
 	 * @param owner
@@ -62,7 +62,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		if (m_user_name == null) return "" ;
 		return m_user_name.getText() ;
 	}
-	
+
 	/**
 	 * ユーザーが選択したフォント名を戻します。
 	 * @return
@@ -71,7 +71,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		if (m_font_name == null) return "" ;
 		return (String) m_font_name.getSelectedItem() ;
 	}
-	
+
 	/**
 	 * ユーザー入力のフォントサイズを戻します。
 	 * @return
@@ -95,7 +95,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		if (m_fore_color == null)  return null ;
 		return m_fore_color.getBackground() ;
 	}
-	
+
 	/**
 	 * ユーザー入力の背景色を戻します。
 	 * @return
@@ -104,7 +104,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		if (m_back_color == null)  return null ;
 		return m_back_color.getBackground() ;
 	}
-	
+
 	/**
 	 * ログの有無についてのユーザー選択を戻します。
 	 * @return
@@ -113,7 +113,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		if (m_logging == null) return false ;
 		return m_logging.isSelected() ;
 	}
-	
+
 	/**
 	 * 最初にやる処理。GUIパーツの配置
 	 *
@@ -124,55 +124,55 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 
 		// --------------------- 入力ここから ---------------------
 		JPanel config_panel = new JPanel(new GridLayout(6, 2)) ;
-		
+
 		m_user_name = new JTextField("", 10) ;
 		config_panel.add(new JLabel("ユーザー名（次回起動後に有効）")) ;
 		config_panel.add(m_user_name) ;
-		
-		m_font_name = new JComboBox(GraphicsEnvironment
+
+		m_font_name = new JComboBox<String>(GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()) ;
 		config_panel.add(new JLabel("フォント名")) ;
 		config_panel.add(m_font_name) ;
-		
+
 		m_font_size = new JTextField("", 2) ;
 		config_panel.add(new JLabel("フォントサイズ")) ;
 		config_panel.add(m_font_size) ;
-		
+
 		m_fore_color = new JButton("変更する") ;
 		m_fore_color.addActionListener(this) ;
 		config_panel.add(new JLabel("文字色")) ;
 		config_panel.add(m_fore_color) ;
-		
+
 		m_back_color = new JButton("変更する") ;
 		m_back_color.addActionListener(this) ;
 		config_panel.add(new JLabel("背景色")) ;
 		config_panel.add(m_back_color) ;
-		
+
 		m_logging = new JCheckBox("ログを取る") ;
 		config_panel.add(m_logging) ;
 
 		cont.add(config_panel, BorderLayout.CENTER) ;
 		// --------------------- 入力ここまで ---------------------
-		
+
 		// -------------------- ボタンここから --------------------
 		JPanel button_panel = new JPanel(new FlowLayout(FlowLayout.RIGHT)) ;
-		
+
 		m_ok = new JButton("OK") ;
 		m_ok.addActionListener(this) ;
 		button_panel.add(m_ok) ;
-		
+
 		m_cancel = new JButton("キャンセル") ;
 		m_cancel.addActionListener(this) ;
 		button_panel.add(m_cancel) ;
 
 		cont.add(button_panel, BorderLayout.SOUTH) ;
 		// -------------------- ボタンここまで --------------------
-		
+
 		//setLocationRelativeTo(null) ;
 		setDefaultCloseOperation(HIDE_ON_CLOSE) ;
 		pack() ;
 	}
-	
+
 	/**
 	 * 設定ファイルを読み込んで、画面を表示する
 	 *
@@ -210,12 +210,12 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		Config.setConfig(Config.C_FONT_NAME, getFontName()) ;
 		Config.setConfig(Config.C_FONT_SIZE, getFontSize()) ;
 		Config.setConfig(Config.C_LOG_ENABLE, isLoggingEnable()) ;
-		
+
 		Color fore = getForeColor() ;
 		Config.setConfig(Config.C_COLOR_FORE_R, fore.getRed()) ;
 		Config.setConfig(Config.C_COLOR_FORE_G, fore.getGreen()) ;
 		Config.setConfig(Config.C_COLOR_FORE_B, fore.getBlue()) ;
-		
+
 		Color back = getBackColor() ;
 		Config.setConfig(Config.C_COLOR_BACK_R, back.getRed()) ;
 		Config.setConfig(Config.C_COLOR_BACK_G, back.getGreen()) ;
@@ -223,7 +223,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 
 		m_owner.saveConfig() ; // ファイル保存。
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
@@ -234,7 +234,7 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 			// OK を押されたら保存して隠れる。
 			save() ;
 			setVisible(false) ;
-			
+
 		} else if (source.equals(m_cancel)) {
 			// キャンセルなら単に隠れる。
 			setVisible(false) ;
@@ -242,13 +242,13 @@ public class ConfigDialog extends JDialog implements ActionListener, WindowListe
 		} else if (source.equals(m_fore_color)) {
 			// 文字色変更。
 			m_fore_color.setBackground(getColorFromChooser(m_fore_color.getBackground())) ;
-			
+
 		} else if (source.equals(m_back_color)) {
 			// 背景色変更。
 			m_back_color.setBackground(getColorFromChooser(m_back_color.getBackground())) ;
 		}
 	}
-	
+
 	/**
 	 * 色設定ダイアログを呼んで、選んだ色を返す
 	 * @param initialColor

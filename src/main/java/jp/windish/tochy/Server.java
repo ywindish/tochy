@@ -1,25 +1,30 @@
 package jp.windish.tochy;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
 /**
  * 複数クライアント間で文字列のやりとりをするためのサーバ。
- * いたってシンプル。認証とか一切していないし、DoS防御とかもしてません。 
+ * いたってシンプル。認証とか一切していないし、DoS防御とかもしてません。
  * @author yamako
  *
  */
 public class Server implements Observer, Runnable {
-	
+
 	private Thread m_thread = null ;
 	private ServerSocket m_server_socket = null ;
-	private Vector<ServerConnect> m_connections = new Vector<ServerConnect>() ; 	/** 接続を受け付けたクライアントの集合 */
-	private MessageView m_message = null ; /** メッセージ表示 */
-	
+	/** 接続を受け付けたクライアントの集合 */
+	private List<ServerConnect> m_connections = new ArrayList<ServerConnect>() ;
+	/** メッセージ表示 */
+	private MessageView m_message = null ;
+
 	/**
 	 * メッセージ表示先を受け取るコンストラクタ
 	 * @param c
@@ -43,7 +48,7 @@ public class Server implements Observer, Runnable {
 	public void run() {
 		start_server() ;
 	}
-	
+
 	/**
 	 * 初期化処理。サーバを立ち上げて、クライアントからの接続要求を待つ。
 	 * 接続要求があったら送受信用スレッドを生成する。
@@ -60,7 +65,7 @@ public class Server implements Observer, Runnable {
 				ServerConnect ysc = new ServerConnect(sk, this) ;
 				m_connections.add( ysc ) ;
 			}
-			
+
 		} catch (BindException e) {
 			printMessage("サーバを起動できません。ポート番号を変えるか、起動済みのサーバを終了して下さい。") ;
 		} catch (IOException e) {
@@ -82,7 +87,7 @@ public class Server implements Observer, Runnable {
 			ysc.sendMessageToClient((String) arg) ;
 		}
 	}
-	
+
 	/**
 	 * サーバをシャットダウンする。というか単に接続を閉じる。
 	 * @throws IOException

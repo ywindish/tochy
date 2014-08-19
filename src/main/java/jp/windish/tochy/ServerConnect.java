@@ -13,16 +13,16 @@ import java.util.Observable;
 public class ServerConnect extends Observable implements Runnable {
 
 	private Thread m_thread = null ;
-	
+
 	/** クライアントとの通信路 */
 	private SocketWrapper m_network = null ;
-	
+
 	/** サーバ統括元 */
 	private Server m_server = null ;
-	
+
 	/** クライアントから送られてきたユーザー名 */
 	private String m_user_name = "" ;
-	
+
 	/**
 	 * コンストラクタ
 	 * @param sk
@@ -31,7 +31,7 @@ public class ServerConnect extends Observable implements Runnable {
 	public ServerConnect(Socket sk, Server ys) {
 		m_server = ys ;
 		try {
-			m_network = new SocketWrapper(sk, System.getProperty("file.encoding")) ;
+			m_network = new SocketWrapper(sk) ;
 		} catch (IOException e) {
 			m_server.printMessage("クライアントからの接続要求受け入れに失敗しました。") ;
 		} catch (Exception e) {
@@ -52,13 +52,13 @@ public class ServerConnect extends Observable implements Runnable {
 		if (m_user_name == null) {
 			return ; // ユーザー名すら取れなかったら終了。
 		}
-		
+
 		// それ以降は、通常の文字列。
 		receiveMessageToServer() ;
 	}
 
 	/**
-	 * クライアントからユーザー名を受信する。本メソッドは通信開始直後に呼び出すこと。 
+	 * クライアントからユーザー名を受信する。本メソッドは通信開始直後に呼び出すこと。
 	 */
 	private void getUserName() {
 		try {
@@ -71,7 +71,7 @@ public class ServerConnect extends Observable implements Runnable {
 		}
 		m_server.update(this, "[" + m_user_name + "] さんが参加しました。") ;
 	}
-	
+
 	/**
 	 * クライアントから文字列を受信して、統括元に渡す
 	 */
@@ -87,7 +87,7 @@ public class ServerConnect extends Observable implements Runnable {
 			m_server.printMessage(e.getLocalizedMessage()) ;
 		}
 	}
-	
+
 	/**
 	 * 与えられた文字列をクライアントに送信する
 	 * @param strMessage
