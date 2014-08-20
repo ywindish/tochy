@@ -11,7 +11,7 @@ import java.util.Date;
  * @author yamako
  *
  */
-public class FileView {
+public class LogFile {
 
 	/** ログファイルのフルパス */
 	private String m_logpath = "" ;
@@ -20,7 +20,7 @@ public class FileView {
 	private PrintStream m_out = null ;
 
 	/**	 */
-	public FileView() {
+	public LogFile() {
 		makePath() ;
 		loadConfig() ;
 	}

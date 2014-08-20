@@ -174,12 +174,12 @@ public class Config {
 	}
 	
 	/**
-	 * 設定ファイルを読み込みます。成功すると真を戻します。
-	 *
+	 * 指定した設定ファイルを読み込みます。成功すると真を戻します。
+	 * @param path
 	 */
-	public static boolean load() {
+	public static boolean load(String path) {
 		try {
-			m_config.load(new FileInputStream(CONFIG_FILE_NAME)) ;
+			m_config.load(new FileInputStream(path)) ;
 		} catch (FileNotFoundException e) {
 			return false ;
 		} catch (IOException e) {
@@ -189,12 +189,20 @@ public class Config {
 	}
 
 	/**
-	 * 設定ファイルを保存します。成功すると真を戻します。
-	 *
+	 * カレントディレクトリから既定の設定ファイルを読み込みます。
+	 * @return
 	 */
-	public static boolean save() {
+	public static boolean load() {
+		return load(CONFIG_FILE_NAME);
+	}
+
+	/**
+	 * 指定したパス名に設定ファイルを保存します。成功すると真を戻します。
+	 * @param dir
+	 */
+	public static boolean save(String path) {
 		try {
-			m_config.store(new FileOutputStream(CONFIG_FILE_NAME), CONFIG_FILE_NAME) ;
+			m_config.store(new FileOutputStream(path), path) ;
 		} catch (FileNotFoundException e) {
 			return false ;
 		} catch (IOException e) {
@@ -203,6 +211,14 @@ public class Config {
 		return true ;
 	}
 
+	/**
+	 * カレントディレクトリに既定名の設定ファイルを保存します。
+	 * @return
+	 */
+	public static boolean save() {
+		return save(CONFIG_FILE_NAME);
+	}
+	
 	/**
 	 * 現在の設定値を反映した Font オブジェクトを戻します。
 	 * @return

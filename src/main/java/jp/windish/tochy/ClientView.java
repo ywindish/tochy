@@ -15,7 +15,7 @@ public class ClientView extends JTextArea implements MessageView {
 
 	private static final long serialVersionUID = 1L;
 	
-	private FileView m_fileview = null ;  // ログファイル
+	private LogFile m_fileview = null ;  // ログファイル
 
 	/**
 	 *
@@ -28,7 +28,7 @@ public class ClientView extends JTextArea implements MessageView {
 		setFont(Config.getFont()) ;
 		setForeground(Config.getForeColor()) ;
 		setBackground(Config.getBackColor()) ;
-		m_fileview = new FileView() ;
+		m_fileview = new LogFile() ;
 
 		// 初期化が終わったら、バージョン情報などを表示。
 		showInitMessage() ;
