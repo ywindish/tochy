@@ -34,19 +34,19 @@ public class ClientView extends JTextArea implements MessageView {
 		showInitMessage() ;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#printMessage(java.lang.String)
+	/**
+	 * 指定されたメッセージを表示する
+	 * @param msg
 	 */
-	synchronized public void printMessage(String str) {
+	synchronized public void printMessage(String msg) {
 
 		// 表示部に送られたものは、先にログファイルに流し込んでから…
 		if (m_fileview != null) {
-			m_fileview.printMessage(str) ;
+			m_fileview.printMessage(msg) ;
 		}
 
 		// 表示部に送る。
-		append(str + System.getProperty("line.separator")) ;
+		append(msg + System.getProperty("line.separator")) ;
 		setCaretPosition(getDocument().getLength()) ;
 	}
 
@@ -58,9 +58,8 @@ public class ClientView extends JTextArea implements MessageView {
 		printMessage(Config.SYSTEM_MESSAGE_PREFIX + str) ;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#loadConfig()
+	/**
+	 * 設定ファイルの内容を反映する
 	 */
 	public void loadConfig() {
 		Color fg = Config.getForeColor() ;

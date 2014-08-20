@@ -5,7 +5,6 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -62,8 +61,8 @@ public class Server implements Observer, Runnable {
 
 			while (true) {
 				Socket sk = m_server_socket.accept() ;  // クライアントの接続待ち。
-				ServerConnect ysc = new ServerConnect(sk, this) ;
-				m_connections.add( ysc ) ;
+				ServerConnect sc = new ServerConnect(sk, this) ;
+				m_connections.add( sc ) ;
 			}
 
 		} catch (BindException e) {
@@ -81,10 +80,8 @@ public class Server implements Observer, Runnable {
 	 * あるクライアントから何か受信したら、全クライアントにそれを送信する。
 	 */
 	synchronized public void update(Observable o, Object arg) {
-		Iterator<ServerConnect> it = m_connections.iterator() ;
-		while (it.hasNext()) {
-			ServerConnect ysc = (ServerConnect) it.next() ;
-			ysc.sendMessageToClient((String) arg) ;
+		for (ServerConnect sc : m_connections) {
+			sc.sendMessageToClient((String) arg) ;
 		}
 	}
 

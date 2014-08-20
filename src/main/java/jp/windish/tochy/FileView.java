@@ -11,7 +11,7 @@ import java.util.Date;
  * @author yamako
  *
  */
-public class FileView implements MessageView {
+public class FileView {
 
 	/** ログファイルのフルパス */
 	private String m_logpath = "" ;
@@ -25,10 +25,6 @@ public class FileView implements MessageView {
 		loadConfig() ;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#loadConfig()
-	 */
 	/**
 	 * ログファイルの出力に関する設定を反映する
 	 */
@@ -52,10 +48,6 @@ public class FileView implements MessageView {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#printMessage(java.lang.String)
-	 */
 	/**
 	 * ログファイルに文字列を１行追記する
 	 */
@@ -66,17 +58,6 @@ public class FileView implements MessageView {
 		m_out.println(str) ;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#printSystemMessage(java.lang.String)
-	 */
-	/**
-	 * ログファイルにシステムメッセージを１行追記する
-	 */
-	public void printSystemMessage(String str) {
-		printMessage(Config.SYSTEM_MESSAGE_PREFIX + str) ;
-	}
-	
 	/**
 	 * ログファイルのフルパスを作る
 	 *
