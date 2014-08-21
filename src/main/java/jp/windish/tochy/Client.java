@@ -45,22 +45,11 @@ public class Client extends JFrame
 	private JButton m_button_quit = null ;   // 通信終了ボタン
 
 	/**
-	 * コンストラクタ
+	 * コンストラクタ。クライアントを初期化して開始する
 	 * @throws HeadlessException
 	 */
 	public Client() throws HeadlessException {
 		super(Config.getConfig(Config.C_USER_NAME)) ;
-	}
-
-	/**
-	 * クライアントを初期化して開始する
-	 * @param strUserName
-	 * @param strIpAddress
-	 */
-	public void init() {
-
-		m_view = new ClientView() ;
-		m_config = new ConfigDialog(this) ;
 		makeUI() ;
 
 		if (Config.getConfig(Config.C_USER_MODE).equals(Config.SERVER_MODE) == true) {
@@ -68,6 +57,7 @@ public class Client extends JFrame
 			m_server = new Server(m_view) ;
 			m_server.start() ;
 		}
+
 		connect() ;
 		sendUserName() ;
 		receiveText() ;
@@ -81,6 +71,13 @@ public class Client extends JFrame
 		Font font = Config.getFont() ;
 		Container cont = getContentPane() ;
 
+		// 表示部
+		m_view = new ClientView() ;
+		m_view.setName("txtView");
+
+		// 設定ダイアログ
+		m_config = new ConfigDialog(this) ;
+
 		// ボタン
 		JPanel button_panel = new JPanel(new FlowLayout(FlowLayout.LEFT)) ;
 		m_button_config = new JButton("設定") ;
@@ -93,7 +90,7 @@ public class Client extends JFrame
 		button_panel.add(m_button_quit) ;
 		cont.add(button_panel, BorderLayout.NORTH) ;
 
-		// 表示部
+		// 表示部スクロール
 		JScrollPane jsp = new JScrollPane(m_view) ;
 		jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED) ;
 		jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER) ;
@@ -103,6 +100,7 @@ public class Client extends JFrame
 		m_textfield = new JTextField("", Config.getConfigInt(Config.C_TEXT_COLUMN)) ;
 		m_textfield.addKeyListener(this) ;
 		m_textfield.setFont(font) ;
+		m_textfield.setName("txtInput");
 		cont.add(m_textfield, BorderLayout.SOUTH) ;
 
 		addWindowListener(this) ;

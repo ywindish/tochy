@@ -8,24 +8,24 @@ import javax.swing.JOptionPane;
  *
  */
 public class Launcher {
-	
+
 	public static void main(String args[]) throws Exception {
 
 		// 設定ファイルを読み込んで。
 		loadConfig() ;
-		
+
 		// いろいろ質問。
 		inputName() ;
 		selectMode() ;
 		inputAddress() ;
 
 		// 必要なことを聞き終わったら、いよいよ開始。
-		new Client().init() ;
+		new Client();
 	}
 
 	/**
 	 *  設定ファイル読み込み
-	 *  
+	 *
 	 */
 	private static void loadConfig() {
 		boolean isLoaded = Config.load() ;
@@ -33,10 +33,10 @@ public class Launcher {
 			JOptionPane.showMessageDialog(null, "設定ファイルを読み込めません。", "", JOptionPane.WARNING_MESSAGE) ;
 		}
 	}
-	
+
 	/**
 	 * 名前入力
-	 * 
+	 *
 	 */
 	private static void inputName() {
 		String strUserName = JOptionPane.showInputDialog("名前を入れて下さい", Config.getConfig(Config.C_USER_NAME)) ;
@@ -53,7 +53,7 @@ public class Launcher {
 	private static void selectMode() {
 		String [] strList =  { Config.CLIENT_MODE, Config.SERVER_MODE } ;
 		String strMode = (String) JOptionPane.showInputDialog(null,
-		             "クライアントになるか、サーバになるかを選んで下さい", "", 
+		             "クライアントになるか、サーバになるかを選んで下さい", "",
 		             JOptionPane.INFORMATION_MESSAGE, null,
 		             strList, Config.getConfig("user.mode"));
 		if (strMode == null) {
@@ -80,7 +80,7 @@ public class Launcher {
 			Config.setConfig(Config.C_NET_ADDRESS, "127.0.0.1") ;
 		}
 	}
-	
+
 	/**
 	 * 本アプリケーションを強制的に終了。なんだかなぁだが。
 	 *
