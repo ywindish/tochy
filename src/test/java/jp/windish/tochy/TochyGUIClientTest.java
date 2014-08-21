@@ -1,5 +1,7 @@
 package jp.windish.tochy;
 
+import java.util.regex.Pattern;
+
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -10,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * GUIレベルの動作テストです。現在、うまく動作しませんが、参考のため残してあります。
+ * GUIレベルの動作テストです。
  * @author yamazaki
  */
 public class TochyGUIClientTest {
@@ -19,9 +21,6 @@ public class TochyGUIClientTest {
 
 	@BeforeClass
 	public static void setUpOnce() {
-		// ここでひっかかるため、このテストは動作しません。
-		// サーバとクライアントを分けて、クライアントは単一スレッドで動作するようにしないとダメそうです。
-		// なお、ここを無視して進めようとするとフリーズします。
 		FailOnThreadViolationRepaintManager.install();
 	}
 
@@ -39,9 +38,9 @@ public class TochyGUIClientTest {
 	@Test
 	public void test() {
 		window.textBox("txtInput").enterText("ほげほげ\n");
-		String view = window.textBox("txtView").text();
 
-		System.out.println(view);
+		Pattern pattern = Pattern.compile("yamako:ほげほげ", Pattern.MULTILINE);
+		window.textBox("txtView").requireText(pattern);
 	}
 
 	@After

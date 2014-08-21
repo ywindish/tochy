@@ -13,7 +13,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import javax.swing.JButton;
@@ -149,20 +148,12 @@ public class Client extends JFrame
 	}
 
 	/**
-	 * サーバからメッセージを受信して、表示エリアに表示しつづける。
-	 * 通信が切断されるか、nullを受信したら、受信終了。
+	 * サーバからメッセージを受信して、表示エリアに表示する
 	 */
 	private void receiveText() {
-		String strMessage = "" ;
-		try {
-			while ((strMessage = m_network.receiveMessage()) != null) {
-				m_view.printMessage(strMessage) ;
-			}
-		} catch (SocketException se) {
-			m_view.printSystemMessage("接続が切断されました。") ;
-		} catch (IOException e) {
-			m_view.printSystemMessage(e.getLocalizedMessage()) ;
-		}
+		// 非同期で実行します
+		ClientReceiver receiver = new ClientReceiver(m_view, m_network);
+		receiver.execute();
 	}
 
 	/**
