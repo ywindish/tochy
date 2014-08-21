@@ -43,7 +43,7 @@ public class Config {
 
 	/** アプリケーション情報 */
 	public static final String APP_NAME = "トーチー！" ;
-	public static final String APP_VERSION = "0.5" ;
+	public static final String APP_VERSION = "0.6" ;
 	public static final String APP_COPYRIGHT = "yamako 2007-2014" ;
 
 	/** 起動モード */
