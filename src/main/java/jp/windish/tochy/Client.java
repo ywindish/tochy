@@ -22,7 +22,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-
 /**
  * 入力した文字列をサーバーに送信するGUIクライアント。
  * @author yamako
@@ -39,8 +38,10 @@ public class Client extends JFrame
 	private ClientView m_view = null ;      // 表示部 + ログファイル
 	private JTextField m_textfield = null ; // 入力部
 	private ConfigDialog m_config = null ;  // 設定ダイアログ
+	private MultiLineTextDialog m_multiline = null; // テキスト送信ダイアログ
 
 	private JButton m_button_config = null ; // 設定ボタン
+	private JButton m_button_multiline = null; // まとめて送信ボタン
 	private JButton m_button_quit = null ;   // 通信終了ボタン
 
 	/**
@@ -76,12 +77,20 @@ public class Client extends JFrame
 
 		// 設定ダイアログ
 		m_config = new ConfigDialog(this) ;
+		
+		// まとめて送信ダイアログ
+		m_multiline = new MultiLineTextDialog(this);
 
 		// ボタン
 		JPanel button_panel = new JPanel(new FlowLayout(FlowLayout.LEFT)) ;
 		m_button_config = new JButton("設定") ;
 		m_button_config.addActionListener(this) ;
 		button_panel.add(m_button_config) ;
+		
+		// ボタン
+		m_button_multiline = new JButton("まとめて送信");
+		m_button_multiline.addActionListener(this);
+		button_panel.add(m_button_multiline);
 
 		// ボタン
 		m_button_quit = new JButton("通信終了") ;
@@ -160,13 +169,27 @@ public class Client extends JFrame
 	 * 入力された文字列をサーバに送信する
 	 */
 	private void sendInputText() {
-
 		try {
 			m_network.sendMessage(m_textfield.getText()) ;
 		} catch (IOException e) {
 			m_view.printSystemMessage(e.getLocalizedMessage()) ;
 		}
 		m_textfield.setText("") ;
+	}
+
+	/**
+	 * 指定の文字列を１行ずつサーバに送信する
+	 * @param text
+	 */
+	public void sendMultiLineText(String text) {
+		if (text == null) return;
+		for (String line : text.split(System.getProperty("line.separator"))) {
+			try {
+				m_network.sendMessage(line) ;
+			} catch (IOException e) {
+				m_view.printSystemMessage(e.getLocalizedMessage()) ;
+			}
+		}
 	}
 
 	/**
@@ -233,6 +256,8 @@ public class Client extends JFrame
 			m_config.load() ; // 設定ダイアログ呼び出し
 			reconfig() ;
 			m_textfield.requestFocusInWindow() ; // 設定後、すぐ入力できるように。
+		} else if (source.equals(m_button_multiline)) {
+			m_multiline.setVisible(true); // まとめて送信ダイアログ呼び出し
 		} else if (source.equals(m_button_quit)) {
 			exit() ; // 終了処理
 		}
