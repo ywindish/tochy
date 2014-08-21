@@ -15,9 +15,9 @@ public class Launcher {
 		loadConfig() ;
 
 		// いろいろ質問。
-		inputName() ;
-		selectMode() ;
-		inputAddress() ;
+		if (inputName() == null) return;
+		if (selectMode() == null) return;
+		if (inputAddress() == null) return;
 
 		// 必要なことを聞き終わったら、いよいよ開始。
 		new Client();
@@ -38,54 +38,41 @@ public class Launcher {
 	 * 名前入力
 	 *
 	 */
-	private static void inputName() {
-		String strUserName = JOptionPane.showInputDialog("名前を入れて下さい", Config.getConfig(Config.C_USER_NAME)) ;
-		if (strUserName == null) {
-			exit() ;
-		}
-		Config.setConfig(Config.C_USER_NAME, strUserName) ;
+	private static String inputName() {
+		String userName = JOptionPane.showInputDialog("名前を入れて下さい", Config.getConfig(Config.C_USER_NAME)) ;
+		Config.setConfig(Config.C_USER_NAME, userName) ;
+		return userName;
 	}
 
 	/**
 	 * クライアント・サーバ選択
 	 *
 	 */
-	private static void selectMode() {
-		String [] strList =  { Config.CLIENT_MODE, Config.SERVER_MODE } ;
-		String strMode = (String) JOptionPane.showInputDialog(null,
+	private static String selectMode() {
+		String [] list =  { Config.CLIENT_MODE, Config.SERVER_MODE } ;
+		String mode = (String) JOptionPane.showInputDialog(null,
 		             "クライアントになるか、サーバになるかを選んで下さい", "",
 		             JOptionPane.INFORMATION_MESSAGE, null,
-		             strList, Config.getConfig("user.mode"));
-		if (strMode == null) {
-			exit() ;
-		}
-		Config.setConfig(Config.C_USER_MODE, strMode) ;
+		             list, Config.getConfig("user.mode"));
+		Config.setConfig(Config.C_USER_MODE, mode) ;
+		return mode;
 	}
 
 	/**
 	 * IPアドレス入力
 	 *
 	 */
-	private static void inputAddress() {
-		String strIpAddress = null ;
+	private static String inputAddress() {
+		String ipAddress = null ;
 		if (Config.getConfig(Config.C_USER_MODE).equals(Config.CLIENT_MODE)) {
 			// クライアントモードなら入力
-			strIpAddress = JOptionPane.showInputDialog("サーバのIPアドレスを入れて下さい", Config.getConfig(Config.C_NET_ADDRESS)) ;
-			if (strIpAddress == null) {
-				exit() ;
-			}
-			Config.setConfig(Config.C_NET_ADDRESS, strIpAddress) ;
+			ipAddress = JOptionPane.showInputDialog("サーバのIPアドレスを入れて下さい", Config.getConfig(Config.C_NET_ADDRESS)) ;
+			Config.setConfig(Config.C_NET_ADDRESS, ipAddress) ;
 		} else {
 			// サーバモードならローカルサーバ
-			Config.setConfig(Config.C_NET_ADDRESS, "127.0.0.1") ;
+			ipAddress = "127.0.0.1";
+			Config.setConfig(Config.C_NET_ADDRESS, ipAddress) ;
 		}
-	}
-
-	/**
-	 * 本アプリケーションを強制的に終了。なんだかなぁだが。
-	 *
-	 */
-	private static void exit() {
-		System.exit(0) ;
+		return ipAddress;
 	}
 }

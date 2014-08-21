@@ -212,8 +212,6 @@ public class Client extends JFrame
 			m_server.shutdown() ;
 		}
 		dispose() ;
-
-		System.exit(0) ; // なぜかこれ書かないと終わらない。
 	}
 
 	/**
