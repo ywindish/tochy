@@ -54,7 +54,7 @@ public class Client extends JFrame
 
 		if (Config.getConfig(Config.C_USER_MODE).equals(Config.SERVER_MODE) == true) {
 			// サーバモードなら、ここでサーバを起動。
-			m_server = new Server(m_view) ;
+			m_server = new Server() ;
 			m_server.start() ;
 		}
 

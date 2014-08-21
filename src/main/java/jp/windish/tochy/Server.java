@@ -21,16 +21,11 @@ public class Server implements Observer, Runnable {
 	private ServerSocket m_server_socket = null ;
 	/** 接続を受け付けたクライアントの集合 */
 	private List<ServerConnect> m_connections = new ArrayList<ServerConnect>() ;
-	/** メッセージ表示 */
-	private MessageView m_message = null ;
 
 	/**
-	 * メッセージ表示先を受け取るコンストラクタ
-	 * @param c
+	 * コンストラクタ
 	 */
-	public Server(MessageView mv) {
-		m_message = mv ;
-	}
+	public Server() {}
 
 	/**
 	 * サーバを開始する
@@ -68,7 +63,12 @@ public class Server implements Observer, Runnable {
 		} catch (BindException e) {
 			printMessage("サーバを起動できません。ポート番号を変えるか、起動済みのサーバを終了して下さい。") ;
 		} catch (IOException e) {
-			printMessage(e.getLocalizedMessage()) ;
+			String msg = e.getLocalizedMessage();
+			if ("socket closed".equals(msg)) {
+				printMessage("サーバを終了しました。");
+			} else {
+				printMessage(msg) ;
+			}
 		}
 	}
 
@@ -102,8 +102,6 @@ public class Server implements Observer, Runnable {
 	 * @param strMessage
 	 */
 	protected void printMessage(String strMessage) {
-		if (m_message != null) {
-			m_message.printSystemMessage(strMessage) ;
-		}
+		System.out.println(Config.SYSTEM_MESSAGE_PREFIX + strMessage);
 	}
 }

@@ -7,14 +7,14 @@ import java.util.Date;
 import javax.swing.JTextArea;
 
 /**
- * クライアント表示部（自動スクロールとログ出力ができる JTextArea） 
+ * クライアント表示部（自動スクロールとログ出力ができる JTextArea）
  * @author yamako
  *
  */
-public class ClientView extends JTextArea implements MessageView {
+public class ClientView extends JTextArea {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private LogFile m_fileview = null ;  // ログファイル
 
 	/**
@@ -50,9 +50,9 @@ public class ClientView extends JTextArea implements MessageView {
 		setCaretPosition(getDocument().getLength()) ;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see tochy.MessageView#printSystemMessage(java.lang.String)
+	/**
+	 * システムメッセージを表示する
+	 * @param str
 	 */
 	public void printSystemMessage(String str) {
 		printMessage(Config.SYSTEM_MESSAGE_PREFIX + str) ;

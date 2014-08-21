@@ -31,7 +31,7 @@ public class SocketWrapper {
 	static {
 		m_sys_encoding = System.getProperty("file.encoding");
 	}
-	
+
 	/**
 	 * IPアドレスとポート番号を受けとって、ソケットを作成するコンストラクタ
 	 * @param remote_address
@@ -83,9 +83,11 @@ public class SocketWrapper {
 	 */
 	public String receiveMessage() throws IOException {
 		String strResult = m_reader.readLine() ;
-		// システムの文字コードで受信
-		String _strResult = new String(strResult.getBytes(m_sys_encoding), m_sys_encoding);
-		return _strResult ;
+		if (strResult != null) {
+			// システムの文字コードで受信
+			strResult = new String(strResult.getBytes(m_sys_encoding), m_sys_encoding);
+		}
+		return strResult ;
 	}
 
 	/**
