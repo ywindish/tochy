@@ -1,6 +1,6 @@
 package jp.windish.tochy;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.*;
 
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
@@ -36,11 +36,17 @@ public class TochyGUIClientTest {
 	}
 
 	@Test
-	public void test() {
+	public void 入力した文字が送受信されて表示される() {
 		window.textBox("txtInput").enterText("ほげほげ\n");
-
-		Pattern pattern = Pattern.compile("yamako:ほげほげ", Pattern.MULTILINE);
-		window.textBox("txtView").requireText(pattern);
+		String view = window.textBox("txtView").text();
+		for (String line : view.split(System.getProperty("line.separator"))) {
+			System.out.println(line);
+			if (line != null && line.equals("yamako:ほげほげ")) {
+				assertTrue("入力した文字が表示されました", true);
+				return;
+			}
+		}
+		fail("入力した文字が表示されませんでした");
 	}
 
 	@After
