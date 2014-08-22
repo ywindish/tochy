@@ -97,16 +97,16 @@ public class Config {
 		m_default_config.setProperty(C_LOG_EXTENSION, ".txt") ;
 		m_default_config.setProperty(C_TEXT_COLUMN, "80") ;
 		m_default_config.setProperty(C_TEXT_ROW, "30") ;
-		
+
 		// デフォルト値をもっておく。
 		m_config = new Properties(m_default_config)  ;
 	}
-	
+
 	/**
 	 * コンストラクタは使えませんよ。
 	 */
 	private Config() {}
-	
+
 	/**
 	 * 指定したキーの設定値を戻します。
 	 * @param strKey
@@ -118,7 +118,7 @@ public class Config {
 		}
 		return m_config.getProperty(strKey) ;
 	}
-	
+
 	/**
 	 * 指定したキーの設定値を int 型で戻します。int 型に変換できないときは 0 を戻します。
 	 * @param strKey
@@ -163,7 +163,7 @@ public class Config {
 	public static void setConfig(String strKey, int value) {
 		setConfig(strKey, new Integer(value).toString()) ; // 内部的にはStringで保存。
 	}
-	
+
 	/**
 	 * 指定したキーに boolean 型の値をセットします。
 	 * @param strKey
@@ -172,7 +172,7 @@ public class Config {
 	public static void setConfig(String strKey, boolean value) {
 		setConfig(strKey, new Boolean(value).toString()) ; // 内部的にはStringで保存。
 	}
-	
+
 	/**
 	 * 指定した設定ファイルを読み込みます。成功すると真を戻します。
 	 * @param path
@@ -201,12 +201,24 @@ public class Config {
 	 * @param dir
 	 */
 	public static boolean save(String path) {
+		FileOutputStream fos = null;
 		try {
-			m_config.store(new FileOutputStream(path), path) ;
+			fos = new FileOutputStream(path);
+			m_config.store(fos, path) ;
 		} catch (FileNotFoundException e) {
 			return false ;
 		} catch (IOException e) {
 			return false ;
+		} catch (Exception e) {
+			return false ;
+		} finally {
+			if (fos != null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return true ;
 	}
@@ -218,7 +230,7 @@ public class Config {
 	public static boolean save() {
 		return save(CONFIG_FILE_NAME);
 	}
-	
+
 	/**
 	 * 現在の設定値を反映した Font オブジェクトを戻します。
 	 * @return
@@ -226,7 +238,7 @@ public class Config {
 	public static Font getFont() {
 		return new Font(getConfig(C_FONT_NAME), getConfigInt(C_FONT_STYLE), getConfigInt(C_FONT_SIZE)) ;
 	}
-	
+
 	/**
 	 * 現在の設定値を反映した、文字色用 Color オブジェクトを戻します。
 	 * @return
@@ -234,7 +246,7 @@ public class Config {
 	public static Color getForeColor() {
 		return new Color(getConfigInt(C_COLOR_FORE_R), getConfigInt(C_COLOR_FORE_G), getConfigInt(C_COLOR_FORE_B)) ;
 	}
-	
+
 	/**
 	 * 現在の設定値を反映した、背景色用 Color オブジェクトを戻します。
 	 * @return
@@ -242,7 +254,7 @@ public class Config {
 	public static Color getBackColor() {
 		return new Color(getConfigInt(C_COLOR_BACK_R), getConfigInt(C_COLOR_BACK_G), getConfigInt(C_COLOR_BACK_B)) ;
 	}
-	
+
 	/**
 	 * バージョン情報を戻します。
 	 * @return

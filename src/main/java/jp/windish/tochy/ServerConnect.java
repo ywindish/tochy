@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Observable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * クライアント接続受け入れ後の、受信待ちスレッド。サーバ側で作成される。
@@ -11,8 +13,6 @@ import java.util.Observable;
  *
  */
 public class ServerConnect extends Observable implements Runnable {
-
-	private Thread m_thread = null ;
 
 	/** クライアントとの通信路 */
 	private SocketWrapper m_network = null ;
@@ -37,8 +37,8 @@ public class ServerConnect extends Observable implements Runnable {
 		} catch (Exception e) {
 			m_server.printMessage(e.getLocalizedMessage()) ;
 		}
-		m_thread = new Thread(this) ;
-		m_thread.start() ;
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(this);
 	}
 
 	/*
@@ -96,6 +96,20 @@ public class ServerConnect extends Observable implements Runnable {
 		if (m_network == null) { return ; }
 		try {
 			m_network.sendMessage(strMessage)  ;
+		} catch (IOException e) {
+			m_server.printMessage(e.getLocalizedMessage()) ;
+		}
+	}
+
+	/**
+	 * クライアントとの接続を切断する
+	 */
+	public void disconnect() {
+		if (m_network == null) {
+			return;
+		}
+		try {
+			m_network.disconnect();
 		} catch (IOException e) {
 			m_server.printMessage(e.getLocalizedMessage()) ;
 		}

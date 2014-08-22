@@ -236,7 +236,13 @@ public class Client extends JFrame
 		}
 		m_view.close(); // ログの後始末。
 
+		// ウィンドウの後始末。
+		m_config.dispose();
+		m_multiline.dispose();
 		dispose() ;
+
+		// ここまででどうしてもスレッドが残るので、VMを強制的に終わらせます。なんとかしたい。
+		System.exit(0);
 	}
 
 	/**

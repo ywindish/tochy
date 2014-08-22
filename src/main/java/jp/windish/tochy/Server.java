@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 複数クライアント間で文字列のやりとりをするためのサーバ。
@@ -17,10 +19,9 @@ import java.util.Observer;
  */
 public class Server implements Observer, Runnable {
 
-	private Thread m_thread = null ;
 	private ServerSocket m_server_socket = null ;
 	/** 接続を受け付けたクライアントの集合 */
-	private List<ServerConnect> m_connections = new ArrayList<ServerConnect>() ;
+	private List<ServerConnect> m_connections = new CopyOnWriteArrayList<ServerConnect>() ;
 
 	/**
 	 * コンストラクタ
@@ -31,8 +32,8 @@ public class Server implements Observer, Runnable {
 	 * サーバを開始する
 	 */
 	public void start() {
-		m_thread = new Thread(this) ;
-		m_thread.start() ;
+		Executor executor = Executors.newSingleThreadExecutor();
+		executor.execute(this);
 	}
 
 	/*
@@ -86,11 +87,20 @@ public class Server implements Observer, Runnable {
 	}
 
 	/**
-	 * サーバをシャットダウンする。というか単に接続を閉じる。
+	 * サーバをシャットダウンする。
 	 * @throws IOException
 	 */
 	public void shutdown() {
+		if (m_server_socket == null) {
+			// サーバ起動時に例外が発生した場合はnullのことがある。その場合は何もしない。
+			return;
+		}
 		try {
+			for (ServerConnect sc : m_connections) {
+				// クライアントとの接続をすべて閉じてから...
+				sc.disconnect();
+			}
+			// サーバソケットを閉じる。
 			m_server_socket.close() ;
 		} catch (IOException e) {
 			printMessage(e.getLocalizedMessage()) ;
