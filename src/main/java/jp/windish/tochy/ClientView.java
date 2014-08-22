@@ -74,6 +74,13 @@ public class ClientView extends JTextArea {
 	}
 
 	/**
+	 * 終了処理
+	 */
+	public void close() {
+		m_fileview.close(); // ログファイルを閉じる
+	}
+
+	/**
 	 * 最初に表示されるメッセージ（バージョン情報など）
 	 */
 	private void showInitMessage() {

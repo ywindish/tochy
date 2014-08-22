@@ -15,7 +15,7 @@ public class LogFile {
 
 	/** ログファイルのフルパス */
 	private String m_logpath = "" ;
-	
+
 	/** ログファイル出力先 */
 	private PrintStream m_out = null ;
 
@@ -40,7 +40,7 @@ public class LogFile {
 			try {
 				// ログが有効で、まだ開いてなかったら、追記できるように開く。
 				m_out = new PrintStream(new FileOutputStream( m_logpath, true ), true) ; // 自動的にフラッシュ
-	
+
 			} catch (FileNotFoundException e) {
 				// 開けなかったら標準出力に送る。
 				m_out = System.out ;
@@ -56,6 +56,14 @@ public class LogFile {
 			return ;
 		}
 		m_out.println(str) ;
+	}
+
+	/**
+	 * ログファイルを閉じる
+	 */
+	public void close() {
+		if (m_out == null) return;
+		m_out.close();
 	}
 
 	/**

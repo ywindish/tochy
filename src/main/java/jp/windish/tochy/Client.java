@@ -77,7 +77,7 @@ public class Client extends JFrame
 
 		// 設定ダイアログ
 		m_config = new ConfigDialog(this) ;
-		
+
 		// まとめて送信ダイアログ
 		m_multiline = new MultiLineTextDialog(this);
 
@@ -86,7 +86,7 @@ public class Client extends JFrame
 		m_button_config = new JButton("設定") ;
 		m_button_config.addActionListener(this) ;
 		button_panel.add(m_button_config) ;
-		
+
 		// ボタン
 		m_button_multiline = new JButton("まとめて送信");
 		m_button_multiline.addActionListener(this);
@@ -234,6 +234,8 @@ public class Client extends JFrame
 			// サーバモード時は、サーバの後始末。
 			m_server.shutdown() ;
 		}
+		m_view.close(); // ログの後始末。
+
 		dispose() ;
 	}
 
